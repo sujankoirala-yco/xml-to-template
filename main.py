@@ -1,48 +1,64 @@
-import xml.etree.ElementTree as ET
-from openpyxl import Workbook
+import mysql.connector
+import pandas as pd
+from openpyxl import load_workbook
 
-xml_data = """
-<root>
-    <employee>
-        <id>1</id>
-        <name>John Doe</name>
-        <department>IT</department>
-    </employee>
-    <employee>
-        <id>2</id>
-        <name>Jane Smith</name>
-        <department>HR</department>
-    </employee>
-</root>
-"""
+def export_mysql_query_to_template():
+    config = {
+        'user': 'your_username',
+        'password': 'your_password',
+        'host': 'localhost',
+        'database': 'your_database'
+    }
 
-# Parse XML
-root = ET.fromstring(xml_data)
+    query = """
+    SELECT
+        column_name AS abc,
+        column_name2 AS def
+    FROM
+        your_table
+    WHERE
+        some_condition
+    """
 
-# First im creating excel work book
-wb = Workbook()
-ws = wb.active
-ws.title = "Employees"
+    template_path = "./template.xls"       
+    output_path = "./src/public/query_result_filled.xlsx"  
 
-#  just mapping
-mapping = {
-    "id": "Employee ID",
-    "name": "Full Name",
-    "department": "Department"
-}
+    cell_map = {
+        'abc': 'B2',
+        'def': 'C2',
+    }
 
-# here im writing headerss
-headers = list(mapping.values())
-ws.append(headers)
+    try:
+        conn = mysql.connector.connect(**config)
+        df = pd.read_sql(query, conn)
 
-# here im wiriging rows
-for emp in root.findall("employee"):
-    row = []
-    for xml_tag in mapping.keys():
-        element = emp.find(xml_tag)
-        row.append(element.text if element is not None else "")
-    ws.append(row)
+        wb = load_workbook(template_path)
+        ws = wb.active  
 
-# here Save Excel file
-wb.save("employees.xlsx")
-print("Excel file created: employees.xlsx")
+        for col_name, start_cell in cell_map.items():
+            if col_name not in df.columns:
+                print(f"⚠️ Column '{col_name}' not found in query results, skipping.")
+                continue
+
+            start_col = ws[start_cell].column  
+            start_row = ws[start_cell].row    
+
+            for i, value in enumerate(df[col_name], start=start_row):
+                ws.cell(row=i, column=start_col, value=value)
+
+        
+        wb.save(output_path)
+        print(f"Data written to template and saved as {output_path}")
+
+    except mysql.connector.Error as err:
+        print(f" MySQL error: {err}")
+
+    except Exception as e:
+        print(f" Unexpected error: {e}")
+
+    finally:
+        if 'conn' in locals() and conn.is_connected():
+            conn.close()
+
+if __name__ == "__main__":
+    export_mysql_query_to_template()
