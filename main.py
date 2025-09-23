@@ -30,7 +30,13 @@ def export_postgres_query_to_template():
     DLY_TY_CHANNEL_NET_PROFIT, DLY_LY_CHANNEL_NET_PROFIT, DLY_CHANNEL_PROFIT_VAR,
     DLY_TY_CHANNEL_BUYING, DLY_LY_CHANNEL_BUYING, DLY_CHANNEL_BUYING_VAR,
     DLY_TY_DIV_CHAN_BUYING, DLY_LY_DIV_CHAN_BUYING, DLY_DIV_CHAN_BUYING_VAR,
+<<<<<<< HEAD
     DLY_TY_CHANNEL_INVOICE FROM sales_data;
+=======
+    DLY_TY_CHANNEL_INVOICE, DLY_LY_CHANNEL_INVOICE, DLY_CHANNEL_INVOICE_VAR,
+    DLY_TY_DIV_CHAN_INVOICE, DLY_LY_DIV_CHAN_INVOICE, DLY_DIV_CHAN_INVOICE_VAR,
+    DLY_LY_DIV_AVG_INVOICE, DLY_TY_DIV_AVG_INVOICE, DLY_DIV_AVG_INVOICE_VAR FROM sales_data;
+>>>>>>> d1c66c8 (feat(postgre-excel): implement loop for static cell mapping)
     """
 
     template_path = "./new_xlsx_template.xlsx"
@@ -65,7 +71,12 @@ def export_postgres_query_to_template():
         'DLY_TY_CHANNEL_NET_PROFIT', 'DLY_LY_CHANNEL_NET_PROFIT', 'DLY_CHANNEL_PROFIT_VAR',
         'DLY_TY_CHANNEL_BUYING', 'DLY_LY_CHANNEL_BUYING', 'DLY_CHANNEL_BUYING_VAR',
         'DLY_TY_DIV_CHAN_BUYING', 'DLY_LY_DIV_CHAN_BUYING', 'DLY_DIV_CHAN_BUYING_VAR',
+<<<<<<< HEAD
         'DLY_TY_CHANNEL_INVOICE'
+=======
+        'DLY_TY_CHANNEL_INVOICE', 'DLY_LY_CHANNEL_INVOICE', 'DLY_CHANNEL_INVOICE_VAR',
+    'DLY_TY_DIV_CHAN_INVOICE', 'DLY_LY_DIV_CHAN_INVOICE', 'DLY_DIV_CHAN_INVOICE_VAR'
+>>>>>>> d1c66c8 (feat(postgre-excel): implement loop for static cell mapping)
     ]
 
     # Starting row
